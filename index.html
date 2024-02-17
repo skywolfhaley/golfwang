@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WGFM</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'CooperStdBlack', Arial, sans-serif;
+      overflow: hidden;
+      background-image: url("https://files.catbox.moe/caqyh0.jpg");
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center center;
+      color: #E5C060;
+    }
+
+    .background-container {
+      padding: 20px;
+    }
+
+    .header {
+      font-size: 2em;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .subtext {
+      font-size: 1.2em;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .album-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .album-item {
+      margin: 10px;
+      cursor: pointer;
+      transition: transform 0.3s, filter 0.3s;
+    }
+
+    .album-item:hover {
+      transform: scale(1.05);
+      filter: brightness(1.2);
+    }
+
+    .album-item img {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="background-container">
+    <div class="header">
+      <a href="https://skywolfhaley.xyz" target="_blank" style="color: #E5C060; text-decoration: none;">WGFM</a>
+    </div>
+    <div class="subtext">
+      A project by <a href="https://skywolfhaley.xyz" target="_blank" style="color: #E5C060; text-decoration: none;">skywolfhaley</a>
+    </div>
+    <div class="album-list" id="albumList">
+      <!-- JavaScript will populate album list here -->
+    </div>
+  </div>
+
+  <script>
+    // Fetch album list from albumList.txt
+    fetch('albumList.txt')
+      .then(response => response.text())
+      .then(data => {
+        const albumList = data.split('\n');
+        const albumContainer = document.getElementById('albumList');
+
+        albumList.forEach(album => {
+          const [albumName, coverLocation, downloadLocation] = album.split(' & ');
+
+          const albumItem = document.createElement('div');
+          albumItem.classList.add('album-item');
+
+          const albumLink = document.createElement('a');
+          albumLink.href = downloadLocation;
+          albumLink.target = '_blank';
+
+          const albumImage = document.createElement('img');
+          albumImage.src = coverLocation;
+          albumImage.alt = albumName;
+
+          albumLink.appendChild(albumImage);
+          albumItem.appendChild(albumLink);
+          albumContainer.appendChild(albumItem);
+        });
+      })
+      .catch(error => console.error('Error fetching album list:', error));
+  </script>
+</body>
+</html>
