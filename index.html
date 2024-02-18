@@ -11,18 +11,16 @@
         }
 
         .background-container {
-            width: 100vw;
-            height: 100vh;
             background-image: url("https://files.catbox.moe/53u29x.jpg");
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center center;
             display: flex;
-            align-items: flex-start;
-            justify-content: top;
             align-items: center;
+            justify-content: center;
             flex-direction: column;
-            position: relative;
+            height: 100vh;
+            overflow-y: auto; /* Enable vertical scrolling */
         }
 
         @font-face {
@@ -45,22 +43,19 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            padding: 20px;
+            gap: 20px;
             margin-top: 20px;
         }
 
         .album {
-            max-width: 400px;
-            margin: 10px;
+            max-width: 300px;
             text-align: center;
         }
 
         .album img {
-            width: 100%;
-            max-width: 400px;
-            height: auto;
-            display: block;
-            margin: 0 auto;
+            width: 300px;
+            height: 300px;
+            object-fit: cover;
         }
     </style>
 </head>
@@ -76,27 +71,21 @@
         fetch('https://raw.githubusercontent.com/skywolfhaley/golfwang/main/albumList.txt')
             .then(response => response.text())
             .then(data => {
-                const albums = data.split('\n');
+                const albums = data.split('\n').filter(line => line.trim() !== '' && !line.startsWith('#'));
 
                 albums.forEach(album => {
-                    if (!album.startsWith("#")) {
-                        const [albumName, coverLocation, downloadLocation] = album.split(' & ');
+                    const [albumName, coverLocation] = album.split(' & ');
 
-                        const albumElement = document.createElement('div');
-                        albumElement.classList.add('album');
+                    const albumElement = document.createElement('div');
+                    albumElement.classList.add('album');
 
-                        const coverImage = document.createElement('img');
-                        coverImage.src = coverLocation;
-                        coverImage.alt = albumName;
+                    const coverImage = document.createElement('img');
+                    coverImage.src = coverLocation;
+                    coverImage.alt = albumName;
 
-                        const albumTitle = document.createElement('p');
-                        albumTitle.textContent = albumName;
+                    albumElement.appendChild(coverImage);
 
-                        albumElement.appendChild(coverImage);
-                        albumElement.appendChild(albumTitle);
-
-                        document.getElementById('albumsContainer').appendChild(albumElement);
-                    }
+                    document.getElementById('albumsContainer').appendChild(albumElement);
                 });
             })
             .catch(error => console.error('Error fetching albums list:', error));
