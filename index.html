@@ -57,8 +57,14 @@
 
         .album img {
             max-width: 100%;
-            max-height: 400px;
-            height: auto;
+            height: auto; /* This maintains the aspect ratio */
+            max-height: 400px; /* Limit the height to 400px */
+            display: block; /* Remove any extra space below the image */
+            margin: 0 auto; /* Center the image within the container */
+        }
+
+        .album p {
+            display: none; /* Hide the text underneath */
         }
     </style>
 </head>
@@ -77,6 +83,11 @@
                 const albums = data.split('\n');
 
                 albums.forEach(album => {
+                    // Ignore comments starting with "#"
+                    if (album.startsWith('#')) {
+                        return;
+                    }
+
                     const [albumName, coverLocation, downloadLocation] = album.split(' & ');
 
                     const albumElement = document.createElement('div');
